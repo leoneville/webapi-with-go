@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"time"
 	"webapi-with-go/database/migrations"
@@ -16,6 +17,7 @@ func StartDB() {
 
 	database, err := gorm.Open(postgres.Open(str), &gorm.Config{})
 	if err != nil {
+		fmt.Println("Could not connect to the Postgres Database")
 		log.Fatal("error: ", err)
 	}
 
@@ -28,6 +30,20 @@ func StartDB() {
 	config.SetConnMaxLifetime(time.Hour)
 
 	migrations.RunMigrations(db)
+}
+
+func CloseConn() error {
+	config, err := db.DB()
+	if err != nil {
+		return err
+	}
+
+	err = config.Close()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GetDatabase() *gorm.DB { // Método para  instaciar o banco sem precisar ficar abrindo varias conexões
