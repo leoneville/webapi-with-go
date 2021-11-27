@@ -11,7 +11,9 @@ func ConfigRoutes(router *gin.Engine) *gin.Engine {
 	{
 		books := main.Group("books") //localhost:5000/api/v1/books
 		{
-			books.GET("/", controllers.ShowBook)
+			books.GET("/:id", controllers.ShowBook)
+			books.GET("/", controllers.ShowBooks)
+			books.POST("/", controllers.CreateBook)
 		}
 	}
 	return router
